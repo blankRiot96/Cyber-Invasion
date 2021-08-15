@@ -1,0 +1,20 @@
+# Testing phase
+    - Developing a level editor(throughout the process)
+    - Working on right, left, forward and backward movement
+    - Making a spawner 
+    - Adding isometric jumps
+    - Adding collision checking
+    - Adding isometric ramps
+    - Adding enemies (Not discussed what kind)
+    - Adding shooting (using mouse to aim)
+    - Adding optomization
+
+    - Cleaning up with some more features and polish (not discussed yet)
+
+# Game design phase (Level editor compeleted)
+    - Designing each level, ie, where to spawn, where enemies come from
+    - Not planned any futher; Unclear
+
+
+# Done
+    - Figuering out how an isometric matrix works
