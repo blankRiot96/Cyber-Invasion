@@ -3,6 +3,8 @@ import pygame
 
 class SpriteSheet():
     def __init__(self, image, width, height, bg=None):
+        self.bg = bg
+
         self.sheet = image
         self.extract = []
         img = pygame.Surface((width, height)).convert_alpha()
@@ -11,7 +13,10 @@ class SpriteSheet():
 
         self.sheet = img
 
-    def get_images(self, rows, columns, width, height, bg=None):
+    def get_images(self, rows, columns, width, height):
+        self.width = width
+        self.height = height
+
         images = []
         fixer = 8
 
@@ -19,7 +24,7 @@ class SpriteSheet():
             for e in range(columns):
                 image = pygame.Surface((width, height)).convert_alpha()
                 image.blit(self.sheet, (0, 0), ((e * width), ((i*fixer) * columns), width, height))
-                image.set_colorkey(bg)
+                image.set_colorkey(self.bg)
 
                 self.extract.append(image)
                 images.append(image)
@@ -30,7 +35,11 @@ class SpriteSheet():
         scaled = []
 
         for i in extract:
-            scaled.append(pygame.transform.scale(i, (width, height)))
+            img = pygame.Surface((self.width, self.height)).convert_alpha()
+            img.blit(i, (0, 0))
+            img.set_colorkey(self.bg)
+
+            scaled.append(pygame.transform.scale(img, (width, height)))
 
         return scaled
 
@@ -38,6 +47,10 @@ class SpriteSheet():
         left_images = []
 
         for i in self.extract:
-            left_images.append(pygame.transform.flip(i, True, False))
+            img = pygame.Surface((self.width, self.height)).convert_alpha()
+            img.blit(i, (0, 0))
+            img.set_colorkey(self.bg)
+
+            left_images.append(pygame.transform.flip(img, True, False))
 
         return left_images

@@ -1,15 +1,47 @@
 import pygame
 
 # Draw world variables
-x_dif = 450 - 385
-y_dif = 37
-grid = 5
+# x_dif = 450 - 385
+# y_dif = 37
+x_dif = 450 - 424
+y_dif = 15
+grid = 20
+by = 0
+up = True
+selected = True
 
 # Blocks
-from src.sprites import block
+from src.sprites import block, block_size
 
 def draw_world(screen):
     for e in range(grid+2):
         for i in range(grid+1):
             screen.blit(block, ((450 + (x_dif*e)) - (x_dif*i), 0 + (y_dif*i) + (y_dif*e)))
+
+def draw_fun(screen):
+    global by, up, selected
+    if up:
+        if by < 15:
+            by += 0.1
+        else:
+            up = False
+    else:
+        if by > 0:
+            by -= 0.1
+        else:
+            up = True
+    
+
+    for e in range(grid+2):
+        for i in range(grid+1):
+            # Very simple On/Off switch
+            selected = not selected
+            
+            # Blit
+            if selected:
+                screen.blit(block, ((450 + (x_dif*e)) - (x_dif*i), by + (0 + (y_dif*i) + (y_dif*e))))
+            else:
+                screen.blit(block, ((450 + (x_dif*e)) - (x_dif*i), 0 + (y_dif*i) + (y_dif*e)))
+
+
 
