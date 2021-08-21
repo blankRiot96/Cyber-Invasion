@@ -43,7 +43,7 @@ while run:
 
     # Draw background
     screen.fill(bg)
-    draw_fun(screen)
+    draw_world(screen)
     
     
     index += dt/8

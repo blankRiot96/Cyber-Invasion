@@ -1,4 +1,5 @@
 import pygame
+import json
 
 # Draw world variables
 # x_dif = 450 - 385
@@ -11,12 +12,27 @@ up = True
 selected = True
 
 # Blocks
-from src.sprites import block, block_size
+from src.sprites import block
+
+
+# def draw_world(screen):
+#     for e in range(grid+2):
+#         for i in range(grid+1):
+#             screen.blit(block, ((450 + (x_dif*e)) - (x_dif*i), 0 + (y_dif*i) + (y_dif*e)))
 
 def draw_world(screen):
-    for e in range(grid+2):
-        for i in range(grid+1):
-            screen.blit(block, ((450 + (x_dif*e)) - (x_dif*i), 0 + (y_dif*i) + (y_dif*e)))
+    with open('src/LevelData/level_test.json', 'r') as f:
+        blocks = json.loads(f.read())
+
+    for e in blocks['objects']:
+        for i in e:
+            obj = i[0:i.find('-')]
+
+            index = blocks['objects'].index(e)
+
+            if obj == "block":
+                current = eval("pygame.R" + blocks['objects'][index][i][2:-1])
+                screen.blit(block, current)
 
 def draw_fun(screen):
     global by, up, selected
