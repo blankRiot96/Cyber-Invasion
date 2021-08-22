@@ -20,31 +20,53 @@ from src.sprites import player, block
 # World
 from src.world import draw_world, draw_fun
 
+# Border
+from src.border import draw_border, return_color
+
+
+
 # Define colours
-bg = (0, 0, 0)
+bg = (25, 25, 25)
 
 # Game Variables
 index = 0
 start = time.time()
 
+count = 100  # Count var
+
 x_dif = 450 - 350
 y_dif = 25
 grid = 10
 
+# Border variables
+particles = []
+color = [0, 0, 0]
+direction = "up"
+
+
 run = True
 while run:
     clock.tick()
+
+    # Time for each iteration
     end = time.time()
+
     dt = end - start
     dt *= 60
-    print(dt)
+    count += dt
+    if count >= 100000:
+        count = 100
 
     start = time.time()
 
+    # Rendering
     # Draw background
     screen.fill(bg)
     draw_world(screen)
-    
+    print(color)
+    color, direction = return_color(color, direction)
+    print(color)
+    draw_border(screen, particles, tuple(color), count)
     
     index += dt/8
 
