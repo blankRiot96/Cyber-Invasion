@@ -1,8 +1,10 @@
 import pygame
 from pygame.locals import *
 
+from json import load
 import time
 
+'''Main Display and setup'''
 pygame.init()
 
 clock = pygame.time.Clock()
@@ -14,19 +16,34 @@ screen = pygame.display.set_mode((screen_width, screen_height), pygame.SCALED | 
 pygame.display.set_caption('Game')
 
 
+'''Importing necessary componenets from SRC'''
 # Sprites
-from src.sprites import player, block
+from src.sprites import player_idle, block
+
+# Background
+from src.backgrounds import background_1
 
 # World
-from src.world import draw_world, draw_fun
+from src.world import load_world, draw_world, draw_fun
 
 # Border
 from src.border import draw_border, return_color
 
+# Player
+from src.player import Player
 
 
+def check_spritesheets(images, size):
+    for i in range(len(images)):
+        screen.blit(images[i], (i*size, 200))
+
+'''Pre loading game elements'''
+blocks = load_world('playground')
+player = Player([200, 200])
+
+'''Variables for the Game'''
 # Define colours
-bg = (25, 25, 25)
+bg = (0, 0, 0)
 
 # Game Variables
 index = 0
@@ -44,6 +61,7 @@ color = [0, 0, 0]
 direction = "up"
 
 
+'''Main Loop'''
 run = True
 while run:
     clock.tick()
@@ -52,7 +70,7 @@ while run:
     end = time.time()
 
     dt = end - start
-    dt *= 60
+    dt *= 100
     count += dt
     if count >= 100000:
         count = 100
@@ -62,31 +80,14 @@ while run:
     # Rendering
     # Draw background
     screen.fill(bg)
-    draw_world(screen)
-    print(color)
-    color, direction = return_color(color, direction)
-    print(color)
-    draw_border(screen, particles, tuple(color), count)
-    
-    index += dt/8
+    draw_world(screen, blocks)
+    blocks = player.update(blocks, dt)
+    player.draw(screen)
 
-    try:
-        player[int(index)]
-    except IndexError:
-        index = 0
-    
-    screen.blit(player[int(index)], (70, 50))
+    # check_spritesheets(player_run_right, 32)
 
-
-    
-
-    # for i in range(grid+1):
-    #     screen.blit(block, (450 - (x_dif*i), 0 + (y_dif*i)))
-
-    # Procedural Pattern
-    # Row 1
-    # screen.blit(block, (450, 0))
-    # screen.blit(block, (424, 15))
+    color, direction = return_color(color, direction, dt)
+    draw_border(screen, particles, tuple(color), dt)
 
     # Event handler
     for event in pygame.event.get():
@@ -94,6 +95,5 @@ while run:
             run = False
 
     pygame.display.update()
-
 
 pygame.quit()

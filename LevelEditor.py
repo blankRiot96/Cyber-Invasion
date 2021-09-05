@@ -14,11 +14,13 @@ grid = 20
 with open('src/LevelData/level_test.json', 'r') as f:
     level_test = json.loads(f.read())
 
+level_test['objects'] = []
+
 def return_base():
     for e in range(grid+2):
         for i in range(grid+1):
-            level_test["objects"].append({return_id('block'): str(pygame.Rect((450 + (x_dif*e)) - (x_dif*i),
-                         0 + (y_dif*i) + (y_dif*e), block_size, block_size))})
+            level_test["objects"].append({return_id('block'): [(450 + (x_dif*e)) - (x_dif*i),
+                         0 + (y_dif*i) + (y_dif*e), block_size, block_size]})
 
 
     return level_test
@@ -27,5 +29,5 @@ def return_base():
 with open('src/LevelData/level_test.json', 'w') as f:
     json.dump(return_base(), f, indent=2)
 
-
+print(len(level_test['objects']))
 

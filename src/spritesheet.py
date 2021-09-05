@@ -4,21 +4,22 @@ import pygame
 class SpriteSheet():
     def __init__(self, image, width, height, bg=None):
         self.bg = bg
-
-        self.sheet = image
         self.extract = []
-        img = pygame.Surface((width, height)).convert_alpha()
-        img.blit(self.sheet, (0, 0))
-        img.set_colorkey(bg)
+        self.sheet = image
 
-        self.sheet = img
+        if bg:
+            img = pygame.Surface((width, height)).convert_alpha()
+            img.blit(self.sheet, (0, 0))
+            img.set_colorkey(bg)
 
-    def get_images(self, rows, columns, width, height):
+            self.sheet = img
+ 
+
+    def get_images(self, rows, columns, width, height, fixer):
         self.width = width
         self.height = height
 
         images = []
-        fixer = 8
 
         for i in range(rows):
             for e in range(columns):
@@ -31,17 +32,20 @@ class SpriteSheet():
                 
         return images
 
+
     def scaler(self, extract, width, height):
         scaled = []
+        width = int(width)
+        height = int(height)
 
         for i in extract:
-            img = pygame.Surface((self.width, self.height)).convert_alpha()
-            img.blit(i, (0, 0))
+            img = pygame.transform.scale(i, (width, height))
             img.set_colorkey(self.bg)
 
-            scaled.append(pygame.transform.scale(img, (width, height)))
+            scaled.append(img)
 
         return scaled
+
 
     def turn_left(self):
         left_images = []

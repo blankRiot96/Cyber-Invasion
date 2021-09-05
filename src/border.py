@@ -1,32 +1,38 @@
 import pygame, random, time
 from pygame.constants import BLEND_RGB_ADD
 
-from src.particle import Particle
 
+color_count = 0
+def return_color(color: list, direction: str, dt) -> list:
+    global color_count
 
-def return_color(color: list, direction: str) -> list:
     r = color[0]
     g = color[1]
     b = color[2]
 
-    if direction == "up":
-        if r < 255:
-            r += 1
-        elif g < 255:
-            g += 1
-        elif b < 255:
-            b += 1
-        else:
-            direction = "down"
+    if color_count <= 100:
+        color_count += dt * 100
+    
     else:
-        if r > 0:
-            r -= 1
-        elif g > 0:
-            g -= 1
-        elif b > 0:
-            b -= 1
+        if direction == "up":
+            if r < 255:
+                r += 1
+            elif g < 255:
+                g += 1
+            elif b < 255:
+                b += 1
+            else:
+                direction = "down"
         else:
-            direction = "up" 
+            if r > 0:
+                r -= 1
+            elif g > 0:
+                g -= 1
+            elif b > 0:
+                b -= 1
+            else:
+                direction = "up"
+        color_count = 0 
 
     color = [r, g, b]
 
@@ -41,29 +47,34 @@ def circle_surf(radius, color) -> pygame.Surface:
     return surf
 
 
-def draw_border(screen, particles:list, color: tuple, count) -> None:
+count = 0
+def draw_border(screen, particles:list, color: tuple, dt) -> None:
+    global count
     # Creating particles
-    if int(count) % 3 == 0:
+    if count <= 150:
+        count += dt * 100
+    else:
         particles.append([random.choice([[random.randrange(0, 1100), 600],
                  [random.randrange(0, 1100), 0], [0, random.randrange(0, 600)], [1100, random.randrange(0, 600)]]),
-                 [0.4, -0.4], random.randint(6, 8),
+                 [0.4 * dt, -0.4 * dt], random.randint(6, 8),
                  random.choice([[random.randrange(0, 1100), 600],
                  [random.randrange(0, 1100), 0], [0, random.randrange(0, 600)], [1100, random.randrange(0, 600)]])])
+        count = 0
 
     # Updating particles
     for particle in particles:
         if (particle[3][0] in range(0, 1100)) and (particle[3][1] == 600):
-            particle[0][0] += random.randint(-2, 2)
+            particle[0][0] += random.randint(-2, 2) * dt
             particle[0][1] += particle[1][1]
         elif (particle[3][0] in range(0, 1100)) and (particle[3][1] == 0):
-            particle[0][0] += random.randint(-2, 2)
+            particle[0][0] += random.randint(-2, 2) * dt
             particle[0][1] -= particle[1][1]
         elif (particle[3][0] == 0) and (particle[3][1] in range(0, 600)):
             particle[0][0] += particle[1][0]
-            particle[0][1] += random.randint(-2, 2)
+            particle[0][1] += random.randint(-2, 2) * dt
         elif (particle[3][0] == 1100) and (particle[3][1] in range(0, 600)):
             particle[0][0] -= particle[1][0]
-            particle[0][1] += random.randint(-2, 2)
+            particle[0][1] += random.randint(-2, 2) * dt
         
         
         particle[2] -= 0.04

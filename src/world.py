@@ -15,24 +15,26 @@ selected = True
 from src.sprites import block
 
 
-# def draw_world(screen):
-#     for e in range(grid+2):
-#         for i in range(grid+1):
-#             screen.blit(block, ((450 + (x_dif*e)) - (x_dif*i), 0 + (y_dif*i) + (y_dif*e)))
+def load_world(level):
+    blocks = {}
+    if level == 'playground':
+        with open('src/LevelData/level_test.json', 'r') as f:
+            blocks = json.loads(f.read())  
+    
 
-def draw_world(screen):
-    with open('src/LevelData/level_test.json', 'r') as f:
-        blocks = json.loads(f.read())
+    return blocks
 
-    for e in blocks['objects']:
+
+def draw_world(screen, blocks):
+    for index, e in enumerate(blocks['objects']):
         for i in e:
-            obj = i[0:i.find('-')]
+            obj = i[:i.find('-')]
 
-            index = blocks['objects'].index(e)
+            params = blocks['objects'][index][i]
+            rect = pygame.Rect(*params)
+            if obj == 'block':
+                screen.blit(block, rect)
 
-            if obj == "block":
-                current = eval("pygame.R" + blocks['objects'][index][i][2:-1])
-                screen.blit(block, current)
 
 def draw_fun(screen):
     global by, up, selected
