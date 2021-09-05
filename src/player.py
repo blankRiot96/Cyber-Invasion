@@ -37,6 +37,14 @@ class Player:
             self.direction = "left"
             self.last_direction = "left"
             self.update_index(0.1*dt)
+        elif pressed == [False, False, True, False]:
+            self.direction = "forward"
+            self.last_direction = "forward"
+            self.update_index(0.1*dt)
+        elif pressed == [False, False, False, True]:
+            self.direction = "backward"
+            self.last_direction = "backward"
+            self.update_index(0.1*dt)
         else:
             self.direction = ""
 
@@ -44,15 +52,28 @@ class Player:
         for block in blocks['objects']:
             for name in block:
                 if self.direction == "right":
-                    block[name][0] -= 0.6
+                    block[name][0] -= 0.5
                 elif self.direction == "left":
-                    block[name][0] += 0.6
+                    block[name][0] += 0.5
+                elif self.direction == "forward":
+                    block[name][1] -= 0.5
+                elif self.direction == "backward":
+                    block[name][1] += 0.5
 
         return blocks
+
 
     def update_index(self, speed):
         self.index += speed
     
+
+    def catch_index(self, movement):
+        try:
+            movement[int(self.index)]
+        except:
+            self.index = 0
+
+
     def idle(self, screen):
         idle_d = player_idling[self.last_direction]
         try:
@@ -63,19 +84,18 @@ class Player:
 
 
     def right(self, screen):
-        try:
-            player_run_right[int(self.index)]
-        except IndexError:
-            self.index = 0
+        self.catch_index(player_run_right)
         screen.blit(player_run_right[int(self.index)], tuple(self.coord))
 
+
     def left(self, screen):
-        try:
-            player_run_left[int(self.index)]
-        except IndexError:
-            self.index = 0
+        self.catch_index(player_run_left)
         screen.blit(player_run_left[int(self.index)], tuple(self.coord))
 
+
+    def forward(self, screen):
+        self.catch_index(player_run_forward)
+        screen.blit(player_run_forward[int(self.index)], tuple(self.coord))
 
     def draw(self, screen) -> None:
         if self.direction == "right":
