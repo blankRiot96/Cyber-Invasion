@@ -24,7 +24,7 @@ dl = Down + Left
 '''
 # Forward/Backward
 player_run_forward = player_run[0:8 ]
-player_run_backward = player_run[32 -1 :32+8 ]
+player_run_backward = player_run[32:32+8 ]
 
 # Right movements
 player_run_ur = player_run[8 :8+8 ]
@@ -47,11 +47,11 @@ player_movements = [
     player_run_ul
 ]
 
-player_idle_backward = player_idle[0:2]
+player_idle_forward = player_idle[0:2]
 player_idle_ur = player_idle[2:4]
 player_idle_right = player_idle[4:6]
 player_idle_dr = player_idle[6:8]
-player_idle_forward = player_idle[8:10]
+player_idle_backward = player_idle[8:10]
 player_idle_dl = player_idle[10:12]
 player_idle_left = player_idle[12:14]
 player_idle_ul = player_idle[14:16]

@@ -13,10 +13,12 @@ from src.sprites import (
 )
 
 
+
 class Player:
     def __init__(self, coord: list) -> None:
         self.coord = coord
         self.direction = ""
+        self.speed = 0.5
 
         # Variable for idling in last position
         self.last_direction = "forward"
@@ -27,38 +29,69 @@ class Player:
 
     def update(self, blocks, dt) -> dict:
         key = pygame.key.get_pressed()
-        pressed = [key[pygame.K_RIGHT], key[pygame.K_LEFT], key[pygame.K_UP], key[pygame.K_DOWN]]
+        pressed1 = [key[pygame.K_RIGHT], key[pygame.K_LEFT], key[pygame.K_UP], key[pygame.K_DOWN]]        
+        pressed2 = [key[pygame.K_d], key[pygame.K_a], key[pygame.K_w], key[pygame.K_s]]
 
-        if pressed == [True, False, False, False]:
+        if [True, False, False, False] in [pressed1, pressed2]:
             self.direction = "right"
             self.last_direction = "right"
             self.update_index(0.1*dt)
-        elif pressed == [False, True, False, False]:
+        elif [False, True, False, False] in [pressed1, pressed2]:
             self.direction = "left"
             self.last_direction = "left"
             self.update_index(0.1*dt)
-        elif pressed == [False, False, True, False]:
+        elif [False, False, True, False] in [pressed1, pressed2]:
             self.direction = "forward"
             self.last_direction = "forward"
             self.update_index(0.1*dt)
-        elif pressed == [False, False, False, True]:
+        elif [False, False, False, True] in [pressed1, pressed2]:
             self.direction = "backward"
             self.last_direction = "backward"
             self.update_index(0.1*dt)
+        elif [True, False, False, True] in [pressed1, pressed2]:
+            self.direction = "down + right"
+            self.last_direction = "down + right"
+            self.update_index(0.1*dt)
+        elif [True, False, True, False] in [pressed1, pressed2]:
+            self.direction = "up + right"
+            self.last_direction = "up + right"
+            self.update_index(0.1*dt)
+        elif [False, True, False, True] in [pressed1, pressed2]:
+            self.direction = "down + left"
+            self.last_direction = "down + left"
+            self.update_index(0.1*dt)
+        elif [False, True, True, False] in [pressed1, pressed2]:
+            self.direction = "up + left"
+            self.last_direction = "up + left"
+            self.update_index(0.1*dt)
         else:
             self.direction = ""
+            self.update_index(0.06*dt)
 
 
         for block in blocks['objects']:
             for name in block:
                 if self.direction == "right":
-                    block[name][0] -= 0.5
+                    block[name][0] -= self.speed 
                 elif self.direction == "left":
-                    block[name][0] += 0.5
+                    block[name][0] += self.speed 
                 elif self.direction == "forward":
-                    block[name][1] -= 0.5
+                    block[name][1] += self.speed 
                 elif self.direction == "backward":
-                    block[name][1] += 0.5
+                    block[name][1] -= self.speed 
+                elif self.direction == "down + right":
+                    block[name][0] -= 0.4
+                    block[name][1] -= 0.3 
+                elif self.direction == "up + right":
+                    block[name][0] -= 0.4  
+                    block[name][1] += 0.3  
+                elif self.direction == "down + left":
+                    block[name][0] += 0.4  
+                    block[name][1] -= 0.3  
+                elif self.direction == "up + left":
+                    block[name][0] += 0.4  
+                    block[name][1] += 0.3  
+                
 
         return blocks
 
@@ -97,11 +130,44 @@ class Player:
         self.catch_index(player_run_forward)
         screen.blit(player_run_forward[int(self.index)], tuple(self.coord))
 
+    def backward(self, screen):
+        self.catch_index(player_run_backward)
+        screen.blit(player_run_backward[int(self.index)], tuple(self.coord))
+
+    def dr(self, screen):
+        self.catch_index(player_run_dr)
+        screen.blit(player_run_dr[int(self.index)], tuple(self.coord))
+
+    def ur(self, screen):
+        self.catch_index(player_run_ur)
+        screen.blit(player_run_ur[int(self.index)], tuple(self.coord))
+
+    def dl(self, screen):
+        self.catch_index(player_run_dl)
+        screen.blit(player_run_dl[int(self.index)], tuple(self.coord))
+
+    def ul(self, screen):
+        self.catch_index(player_run_ul)
+        screen.blit(player_run_ul[int(self.index)], tuple(self.coord))
+
+
     def draw(self, screen) -> None:
         if self.direction == "right":
             self.right(screen)
         elif self.direction == "left":
             self.left(screen)
+        elif self.direction == "forward":
+            self.forward(screen)
+        elif self.direction == "backward":
+            self.backward(screen)
+        elif self.direction == "down + right":
+            self.dr(screen)
+        elif self.direction == "up + right":
+            self.ur(screen)
+        elif self.direction == "down + left":
+            self.dl(screen)
+        elif self.direction == "up + left":
+            self.ul(screen)
         elif self.direction == "":
             self.idle(screen)
     

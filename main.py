@@ -1,5 +1,6 @@
 import pygame
 from pygame.locals import *
+import sys
 
 from json import load
 import time
@@ -13,13 +14,10 @@ screen_width = 1100
 screen_height = 600
 
 screen = pygame.display.set_mode((screen_width, screen_height), pygame.SCALED | pygame.RESIZABLE)
-pygame.display.set_caption('Game')
+pygame.display.set_caption('Cyber Invasion')
 
 
 '''Importing necessary componenets from SRC'''
-# Sprites
-from src.sprites import player_idle, block
-
 # Background
 from src.backgrounds import background_1
 
@@ -89,6 +87,9 @@ while run:
     color, direction = return_color(color, direction, dt)
     draw_border(screen, particles, tuple(color), dt)
 
+    # FPS
+    
+
     # Event handler
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -96,4 +97,4 @@ while run:
 
     pygame.display.update()
 
-pygame.quit()
+sys.exit()
