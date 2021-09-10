@@ -7,5 +7,5 @@ A Game belonging to xLainik and myself
   - `cd Cyber-Invasion` 
   - `pip install -r requirements.txt` get all the dependencies 
   -  `py main.py` (windows) 
-  - `python/python3 main.py` (linux/mac) to run the code
+  - `python main.py` (linux/mac) to run the code
 
