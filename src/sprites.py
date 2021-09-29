@@ -70,4 +70,11 @@ player_idling = {
 # Block sprite
 block_size = 60
 block_img = pygame.image.load(path + 'block1.png').convert_alpha()
-block = pygame.transform.scale(block_img, (60, 60))
+block = pygame.transform.scale(block_img, (block_size, block_size))
+
+
+# Shadow
+shadow_size = 20
+shadow_img = pygame.image.load(path + 'shadow.png').convert_alpha()
+shadow_img = player_run_spritesheet.scaler([shadow_img], shadow_size, shadow_size)[0]
+

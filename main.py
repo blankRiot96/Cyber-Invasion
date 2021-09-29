@@ -39,6 +39,7 @@ def check_spritesheets(images, size):
 blocks = load_world('playground')
 player = Player([200, 200])
 
+
 '''Variables for the Game'''
 # Define colours
 bg = (0, 0, 0)
@@ -80,7 +81,9 @@ while run:
     screen.fill(bg)
     draw_world(screen, blocks)
     blocks = player.update(blocks, dt)
+
     player.draw(screen)
+
 
     # check_spritesheets(player_run_right, 32)
 
@@ -94,6 +97,9 @@ while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                player.jump = True
 
     pygame.display.update()
 

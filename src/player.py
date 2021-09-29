@@ -1,4 +1,5 @@
 import pygame
+import math
 from src.sprites import (
     player_run_forward,
     player_run_backward,
@@ -9,16 +10,23 @@ from src.sprites import (
     player_run_ur,
     player_run_ul,
 
-    player_idling
+    player_idling,
 )
+from src.diff_val import *
+from src.shadow import Shadow
 
+shadow = Shadow(200, 200)
 
 
 class Player:
     def __init__(self, coord: list) -> None:
+        self.x = 0
+        self.y = 0
         self.coord = coord
         self.direction = ""
-        self.speed = 0.5
+        self.speed = 1.2
+        self.jump = False
+        self.dy = 0
 
         # Variable for idling in last position
         self.last_direction = "forward"
@@ -31,6 +39,9 @@ class Player:
         key = pygame.key.get_pressed()
         pressed1 = [key[pygame.K_RIGHT], key[pygame.K_LEFT], key[pygame.K_UP], key[pygame.K_DOWN]]        
         pressed2 = [key[pygame.K_d], key[pygame.K_a], key[pygame.K_w], key[pygame.K_s]]
+
+        self.x = 0
+        self.y = 0
 
         if [True, False, False, False] in [pressed1, pressed2]:
             self.direction = "right"
@@ -68,31 +79,39 @@ class Player:
             self.direction = ""
             self.update_index(0.06*dt)
 
+        movement_direction = [self.direction]
+        if self.direction == "down + right":
+            movement_direction = ["backward", "right"]
+        elif self.direction == "up + right":
+            movement_direction = ["forward", "right"]
+        elif self.direction == "down + left":
+            movement_direction = ["backward", "left"]
+        elif self.direction == "up + left":
+            movement_direction = ["forward", "left"]
 
+
+        if "right" in movement_direction:
+            self.x -= self.speed 
+        if "left" in movement_direction:
+            self.x += self.speed 
+        if "forward" in movement_direction:
+            self.y += self.speed 
+        if "backward" in movement_direction:
+            self.y -= self.speed 
+
+        if self.x != 0 and self.y != 0:
+            self.x *= math.sqrt(2)/2
+            self.y *= math.sqrt(2)/2
+
+
+        if self.jump:
+            self.y = self.player_jump(self.y)
+        
         for block in blocks['objects']:
             for name in block:
-                if self.direction == "right":
-                    block[name][0] -= self.speed 
-                elif self.direction == "left":
-                    block[name][0] += self.speed 
-                elif self.direction == "forward":
-                    block[name][1] += self.speed 
-                elif self.direction == "backward":
-                    block[name][1] -= self.speed 
-                elif self.direction == "down + right":
-                    block[name][0] -= 0.4
-                    block[name][1] -= 0.3 
-                elif self.direction == "up + right":
-                    block[name][0] -= 0.4  
-                    block[name][1] += 0.3  
-                elif self.direction == "down + left":
-                    block[name][0] += 0.4  
-                    block[name][1] -= 0.3  
-                elif self.direction == "up + left":
-                    block[name][0] += 0.4  
-                    block[name][1] += 0.3  
-                
-
+                block[name][0] += self.x * dt
+                block[name][1] += self.y * dt
+            
         return blocks
 
 
@@ -114,6 +133,42 @@ class Player:
         except:
             self.index = 0
         screen.blit(idle_d[int(self.index)], tuple(self.coord))
+
+
+    def player_jump(self, y):
+        down = ["down + left", "down + right", "backward"]
+        cooldown = 200
+        speed = 2
+        condition = self.direction in down
+
+        if condition:
+            y = self.jump_down(y, speed, cooldown)
+        else:
+            y = self.jump_up(y, speed, cooldown)
+
+        return y
+
+    def jump_down(self, y, speed, cooldown):
+        if self.dy > -(cooldown):
+            self.dy -= speed
+            y -= speed
+        else:
+            y = self.jump_up(y, speed, cooldown)
+            self.jump = False
+            self.dy = 0
+
+        return y
+
+    def jump_up(self, y, speed, cooldown):
+        if self.dy < cooldown:
+            self.dy += speed
+            y += speed
+        else:
+            self.jump_down(y, speed, cooldown)
+            self.jump = False
+            self.dy = 0
+
+        return y
 
 
     def right(self, screen):
@@ -152,6 +207,9 @@ class Player:
 
 
     def draw(self, screen) -> None:
+        shadow.update(self.coord, self.jump)
+        shadow.draw(screen)
+
         if self.direction == "right":
             self.right(screen)
         elif self.direction == "left":
@@ -170,4 +228,4 @@ class Player:
             self.ul(screen)
         elif self.direction == "":
             self.idle(screen)
-    
+        

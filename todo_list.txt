@@ -1,11 +1,10 @@
 # Testing phase
     - Developing a level editor(throughout the process)
-    - Working on right, left, forward and backward movement
     - Making a spawner 
     - Adding isometric jumps
     - Adding collision checking
     - Adding isometric ramps
-    - Adding enemies (Not discussed what kind)
+    - Adding enemies - [Flying robots]
     - Adding shooting (using mouse to aim)
     - Adding optomization
 
@@ -18,3 +17,5 @@
 
 # Done
     - Figuering out how an isometric matrix works
+    - Working on right, left, forward and backward movement
+    - Working on diagonal movement 
