@@ -16,10 +16,9 @@ screen_height = 600
 screen = pygame.display.set_mode((screen_width, screen_height), pygame.SCALED | pygame.RESIZABLE)
 pygame.display.set_caption('Cyber Invasion')
 
-
-'''Importing necessary componenets from SRC'''
+'''Importing necessary components from SRC'''
 # Background
-from src.backgrounds import background_1
+# from src.backgrounds import background_1
 
 # World
 from src.world import load_world, draw_world, draw_fun
@@ -33,12 +32,12 @@ from src.player import Player
 
 def check_spritesheets(images, size):
     for i in range(len(images)):
-        screen.blit(images[i], (i*size, 200))
+        screen.blit(images[i], (i * size, 200))
+
 
 '''Pre loading game elements'''
 blocks = load_world('playground')
-player = Player([200, 200])
-
+player = Player([550, 300])
 
 '''Variables for the Game'''
 # Define colours
@@ -60,47 +59,51 @@ color = [0, 0, 0]
 direction = "up"
 
 
-'''Main Loop'''
-run = True
-while run:
-    clock.tick()
+def main():
+    # Main Loop
+    global blocks, start, count, color, direction
+    run = True
+    while run:
+        clock.tick()
 
-    # Time for each iteration
-    end = time.time()
+        # Time for each iteration
+        end = time.time()
 
-    dt = end - start
-    dt *= 100
-    count += dt
-    if count >= 100000:
-        count = 100
+        dt = end - start
+        dt *= 100
+        count += dt
+        if count >= 100000:
+            count = 100
 
-    start = time.time()
+        start = time.time()
 
-    # Rendering
-    # Draw background
-    screen.fill(bg)
-    draw_world(screen, blocks)
-    blocks = player.update(blocks, dt)
+        # Rendering
+        # Draw background
+        screen.fill(bg)
+        draw_world(screen, blocks)
+        blocks = player.update(blocks, dt)
 
-    player.draw(screen)
+        player.draw(screen)
+
+        # check_spritesheets(player_run_right, 32)
+
+        color, direction = return_color(color, direction, dt)
+        draw_border(screen, particles, tuple(color), dt)
+
+        # FPS
+
+        # Event handler
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    player.jump = True
+
+        pygame.display.update()
+
+    sys.exit()
 
 
-    # check_spritesheets(player_run_right, 32)
-
-    color, direction = return_color(color, direction, dt)
-    draw_border(screen, particles, tuple(color), dt)
-
-    # FPS
-    
-
-    # Event handler
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            run = False
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE:
-                player.jump = True
-
-    pygame.display.update()
-
-sys.exit()
+if __name__ == "__main__":
+    main()

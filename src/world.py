@@ -18,9 +18,8 @@ from src.sprites import block
 def load_world(level):
     blocks = {}
     if level == 'playground':
-        with open('src/LevelData/level_test.json', 'r') as f:
-            blocks = json.loads(f.read())  
-    
+        with open('src/level_data/level_test.json', 'r') as f:
+            blocks = json.loads(f.read())
 
     return blocks
 
@@ -48,18 +47,14 @@ def draw_fun(screen):
             by -= 0.1
         else:
             up = True
-    
 
-    for e in range(grid+2):
-        for i in range(grid+1):
+    for e in range(grid + 2):
+        for i in range(grid + 1):
             # Very simple On/Off switch
             selected = not selected
-            
+
             # Blit
             if selected:
-                screen.blit(block, ((450 + (x_dif*e)) - (x_dif*i), by + (0 + (y_dif*i) + (y_dif*e))))
+                screen.blit(block, ((450 + (x_dif * e)) - (x_dif * i), by + (0 + (y_dif * i) + (y_dif * e))))
             else:
-                screen.blit(block, ((450 + (x_dif*e)) - (x_dif*i), 0 + (y_dif*i) + (y_dif*e)))
-
-
-
+                screen.blit(block, ((450 + (x_dif * e)) - (x_dif * i), 0 + (y_dif * i) + (y_dif * e)))

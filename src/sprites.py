@@ -4,7 +4,7 @@ from src.spritesheet import SpriteSheet
 
 path = 'src/images/'
 
-# Player sprites
+'''Player Sprites'''
 player_run_img = pygame.image.load(path + 'player_run.png').convert_alpha()
 player_run_spritesheet = SpriteSheet(player_run_img, 256, 256, bg=(0, 0, 0))
 player_run = player_run_spritesheet.get_images(8, 8, 32, 32, fixer=4)
@@ -47,6 +47,8 @@ player_movements = [
     player_run_ul
 ]
 
+# Player idle
+
 player_idle_forward = player_idle[0:2]
 player_idle_ur = player_idle[2:4]
 player_idle_right = player_idle[4:6]
@@ -66,6 +68,9 @@ player_idling = {
     "left": player_idle_left,
     "uo + right": player_idle_ul
 }
+
+# Player jump
+
 
 # Block sprite
 block_size = 60
