@@ -1,9 +1,10 @@
 import pygame, random, time
 from pygame.constants import BLEND_RGB_ADD
 
-
 color_count = 0
-def return_color(color: list, direction: str, dt) -> list:
+
+
+def return_color(color: list[int], direction: str, dt: float) -> tuple[list, str]:
     global color_count
 
     r = color[0]
@@ -12,7 +13,7 @@ def return_color(color: list, direction: str, dt) -> list:
 
     if color_count <= 100:
         color_count += dt * 100
-    
+
     else:
         if direction == "up":
             if r < 255:
@@ -32,11 +33,11 @@ def return_color(color: list, direction: str, dt) -> list:
                 b -= 1
             else:
                 direction = "up"
-        color_count = 0 
+        color_count = 0
 
     color = [r, g, b]
 
-    return color, direction 
+    return color, direction
 
 
 def circle_surf(radius, color) -> pygame.Surface:
@@ -48,17 +49,21 @@ def circle_surf(radius, color) -> pygame.Surface:
 
 
 count = 0
-def draw_border(screen, particles:list, color: tuple, dt) -> None:
+
+
+def draw_border(screen, particles: list, color: tuple, dt) -> None:
     global count
     # Creating particles
     if count <= 150:
         count += dt * 100
     else:
         particles.append([random.choice([[random.randrange(0, 1100), 600],
-                 [random.randrange(0, 1100), 0], [0, random.randrange(0, 600)], [1100, random.randrange(0, 600)]]),
-                 [0.4 * dt, -0.4 * dt], random.randint(6, 8),
-                 random.choice([[random.randrange(0, 1100), 600],
-                 [random.randrange(0, 1100), 0], [0, random.randrange(0, 600)], [1100, random.randrange(0, 600)]])])
+                                         [random.randrange(0, 1100), 0], [0, random.randrange(0, 600)],
+                                         [1100, random.randrange(0, 600)]]),
+                          [0.4 * dt, -0.4 * dt], random.randint(6, 8),
+                          random.choice([[random.randrange(0, 1100), 600],
+                                         [random.randrange(0, 1100), 0], [0, random.randrange(0, 600)],
+                                         [1100, random.randrange(0, 600)]])])
         count = 0
 
     # Updating particles
@@ -75,15 +80,15 @@ def draw_border(screen, particles:list, color: tuple, dt) -> None:
         elif (particle[3][0] == 1100) and (particle[3][1] in range(0, 600)):
             particle[0][0] -= particle[1][0]
             particle[0][1] += random.randint(-2, 2) * dt
-        
-        
+
         particle[2] -= 0.04
 
         # Rendering Particles
         pygame.draw.circle(screen, color, [int(particle[0][0]), int(particle[0][1])], int(particle[2]))
 
         radius = particle[2] * 2
-        screen.blit(circle_surf(radius, (20, 20, 20)), (int(particle[0][0] - radius), int(particle[0][1] - radius)), special_flags=BLEND_RGB_ADD)
+        screen.blit(circle_surf(radius, (20, 20, 20)), (int(particle[0][0] - radius), int(particle[0][1] - radius)),
+                    special_flags=BLEND_RGB_ADD)
 
         # Removing Particles
         if particle[2] <= 0:
@@ -91,39 +96,37 @@ def draw_border(screen, particles:list, color: tuple, dt) -> None:
 
 
 ''' RECTANGLE ATTEMPT TO BE DOCUMENTED
-# def glow_surface(size: list, color: list, rect) -> pygame.Surface:
-#     try:
-#         surf = pygame.Surface((int(size[0]) + 1, int(size[1]) + 1))
-#     except:
-#         surf = pygame.Surface((1, 1))
-#     pygame.draw.rect(surf, tuple(color), rect)
-#     surf.set_colorkey((0, 0, 0))
+def glow_surface(size: list, color: list, rect) -> pygame.Surface:
+    try:
+        surf = pygame.Surface((int(size[0]) + 1, int(size[1]) + 1))
+    except:
+        surf = pygame.Surface((1, 1))
+    pygame.draw.rect(surf, tuple(color), rect)
+    surf.set_colorkey((0, 0, 0))
 
-#     return surf
+    return surf
 
 
-# def draw_border(screen, particles: list, count) -> None:
-#     if int(count) % 8 == 0:
-#         particles.append(Particle([random.randrange(0, 1100), 600], [255, 255, 255], [5, 5]))
-#     for particle in particles:
-#         particle.pos[0] += random.randint(-1, 1)
-#         particle.pos[1] -= 0.3
-#         particle.size[0] -= 0.02
-#         particle.size[1] -= 0.02
+def draw_border(screen, particles: list, count) -> None:
+    if int(count) % 8 == 0:
+        particles.append(Particle([random.randrange(0, 1100), 600], [255, 255, 255], [5, 5]))
+    for particle in particles:
+        particle.pos[0] += random.randint(-1, 1)
+        particle.pos[1] -= 0.3
+        particle.size[0] -= 0.02
+        particle.size[1] -= 0.02
 
-#         # Remove particles if their size becomes 0
-#         if particle.size == [0, 0]:
-#             particles.remove(particle)
+        # Remove particles if their size becomes 0
+        if particle.size == [0, 0]:
+            particles.remove(particle)
 
-#         particle.draw(screen) 
-#         # Adding the Glow effect
-#         glow_rect = pygame.Rect(tuple(particle.pos), ((particle.size[0] + (particle.size[0] / 2),
-#                  (particle.size[1] + (particle.size[1] / 2)))))
+        particle.draw(screen) 
+        # Adding the Glow effect
+        glow_rect = pygame.Rect(tuple(particle.pos), ((particle.size[0] + (particle.size[0] / 2),
+                 (particle.size[1] + (particle.size[1] / 2)))))
 
-#         screen.blit(glow_surface(particle.size, [25, 25, 25], glow_rect),
-#                     tuple(particle.pos),
-#                     special_flags=BLEND_RGB_ADD)
+        screen.blit(glow_surface(particle.size, [25, 25, 25], glow_rect),
+                    tuple(particle.pos),
+                    special_flags=BLEND_RGB_ADD)
 
 '''
-
-

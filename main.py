@@ -1,8 +1,6 @@
 import pygame
-from pygame.locals import *
+from typing import List
 import sys
-
-from json import load
 import time
 
 '''Main Display and setup'''
@@ -28,16 +26,17 @@ from src.border import draw_border, return_color
 
 # Player
 from src.player import Player
+from src.sprites import player_jump
 
 
-def check_spritesheets(images, size):
+def check_sprite_sheets(images: List[pygame.Surface], size: float):
     for i in range(len(images)):
         screen.blit(images[i], (i * size, 200))
 
 
 '''Pre loading game elements'''
 blocks = load_world('playground')
-player = Player([550, 300])
+player = Player([550, 300], screen)
 
 '''Variables for the Game'''
 # Define colours
@@ -83,14 +82,12 @@ def main():
         draw_world(screen, blocks)
         blocks = player.update(blocks, dt)
 
-        player.draw(screen)
+        player.draw()
 
-        # check_spritesheets(player_run_right, 32)
+        # check_sprite_sheets(player_jump, 32*1.5)
 
         color, direction = return_color(color, direction, dt)
         draw_border(screen, particles, tuple(color), dt)
-
-        # FPS
 
         # Event handler
         for event in pygame.event.get():
