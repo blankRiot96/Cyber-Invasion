@@ -1,6 +1,5 @@
 import pygame
 import math
-from typing import Dict, List
 from src.sprites import (
     player_run_forward,
     player_run_backward,
@@ -37,6 +36,9 @@ class Player:
         self.gravity = 2.2
         self.dy = 0
 
+        # Variable to determine which stage of jumping the Player is in
+        self.stage = 0
+
         # Jump variable to determine if finished going up
         self.finished = False
 
@@ -49,7 +51,7 @@ class Player:
         # Index Variable
         self.index = 0
 
-    def update(self, blocks, dt) -> Dict[str, List[Dict[str, List[int]]]]:
+    def update(self, blocks, dt) -> dict[str, list[dict[str, list[int]]]]:
         self.dt = dt
         key = pygame.key.get_pressed()
         pressed1 = [key[pygame.K_RIGHT], key[pygame.K_LEFT], key[pygame.K_UP], key[pygame.K_DOWN]]
@@ -118,6 +120,7 @@ class Player:
             self.y = self.player_jump(self.y)
         else:
             self.shadow_coord = list(self.coord)
+            self.stage = 0
 
         # Updating map,
         # Causing moving background effect
@@ -165,8 +168,11 @@ class Player:
 
         return y
 
-    def update_index(self, speed):
-        self.index += speed * self.dt
+    def update_index(self, speed: float = 1):
+        if not self.jump:
+            self.index += speed * self.dt
+        else:
+            self.index += 1
 
     def catch_index(self, movement):
         try:
@@ -174,16 +180,49 @@ class Player:
         except IndexError:
             self.index = 0
 
+    def jump_staging(self):
+        if self.stage <= 1:  # Leap
+            if self.dy <= 20:
+                if self.dy == 1:
+                    self.update_index()
+            elif self.dy <= 50:
+                if self.dy == 19:
+                    self.update_index()
+            else:
+                self.stage = 2  # Max Height going up
+        elif self.stage == 2:
+            if self.dy <= 200:
+                if self.dy == 199:
+                    self.update_index()
+            else:
+                self.stage = 3  # Max height dropping down
+        elif self.stage == 3:
+            if 200 <= self.dy < 30:
+                if self.dy == 199:
+                    self.update_index()
+            else:
+                self.stage = 4  # Landing
+        elif self.stage == 4:
+            if 30 <= self.dy < 20:
+                if self.dy == 29:
+                    self.update_index()
+            elif 20 <= self.dy < 10:
+                if self.dy == 19:
+                    self.update_index()
+            elif 10 <= self.dy:
+                if self.dy == 9:
+                    self.update_index()
+
     def draw_jump(self):
-        self.update_index(0.1)
         try:
             jump_d = player_jumping[self.direction]
         except KeyError:
             jump_d = player_jumping[self.last_direction]
 
+        self.jump_staging()
         self.catch_index(jump_d)
 
-        self.screen.blit(jump_d[int(self.index)], tuple(self.coord))
+        self.screen.blit(jump_d[self.stage], tuple(self.coord))
 
     def idle(self):
         self.update_index(0.06)
@@ -251,4 +290,3 @@ class Player:
             match_cases[self.direction]()
         else:
             self.draw_jump()
-

@@ -9,8 +9,10 @@ x_dif = 450 - 424
 y_dif = 15
 grid = 20
 
+path = 'src/level_data/level_test.json'
+
 # Levels
-with open('src/level_data/level_test.json', 'r') as f:
+with open(path, 'r') as f:
     level_test = json.loads(f.read())
 
 level_test['objects'] = []
@@ -25,7 +27,7 @@ def return_base():
     return level_test
 
 
-with open('src/level_data/level_test.json', 'w') as f:
+with open(path, 'w') as f:
     json.dump(return_base(), f, indent=2)
 
 print(len(level_test['objects']))

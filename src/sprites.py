@@ -20,7 +20,7 @@ player_idle = player_idle_sprite_sheet.resize(player_idle, 32 * player_scale, 32
 
 player_jump_img = pygame.image.load(path + 'player-jump_40x40.png').convert_alpha()
 player_jump_sprite_sheet = SpriteSheet(player_jump_img, 280, 320)
-player_jump = player_jump_sprite_sheet.get_images(8, 7, 40, 40, fixer=6)
+player_jump = player_jump_sprite_sheet.get_images(8, 7, 40, 40, fixer=5.7)
 player_jump = player_jump_sprite_sheet.resize(player_jump, 40 * player_scale, 40 * player_scale)
 
 '''

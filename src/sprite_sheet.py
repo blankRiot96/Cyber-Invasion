@@ -18,7 +18,7 @@ class SpriteSheet:
 
             self.sheet = img
 
-    def get_images(self, rows: int, columns: int, width: float, height: float, fixer: int):
+    def get_images(self, rows: int, columns: int, width: float, height: float, fixer: float = 1):
         self.width = width
         self.height = height
 

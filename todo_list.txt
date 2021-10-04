@@ -1,21 +1,24 @@
 # Testing phase
     - Developing a level editor(throughout the process)
-    - Making a spawner 
-    - Adding isometric jumps
+    - Fixing left + up no jump issue
+    - Making a spawner
     - Adding collision checking
     - Adding isometric ramps
     - Adding enemies - [Flying robots]
     - Adding shooting (using mouse to aim)
-    - Adding optomization
+    - Adding optimization
 
-    - Cleaning up with some more features and polish (not discussed yet)
+    - Cleaning up with some more features and polish
+        - Making dynamic shadow: Bigger and Smaller based on distance from ground
 
-# Game design phase (Level editor compeleted)
+# Game design phase (Level editor completed)
     - Designing each level, ie, where to spawn, where enemies come from
-    - Not planned any futher; Unclear
+    - Not planned any further; Unclear
 
 
 # Done
-    - Figuering out how an isometric matrix works
+    - Figuring out how an isometric matrix works
     - Working on right, left, forward and backward movement
-    - Working on diagonal movement 
+    - Working on diagonal movement
+    - Adding isometric jumps
+    - Making a proper sprite sheet checker file

@@ -26,13 +26,6 @@ from src.border import draw_border, return_color
 
 # Player
 from src.player import Player
-from src.sprites import player_jump
-
-
-def check_sprite_sheets(images: List[pygame.Surface], size: float):
-    for i in range(len(images)):
-        screen.blit(images[i], (i * size, 200))
-
 
 '''Pre loading game elements'''
 blocks = load_world('playground')
@@ -59,9 +52,9 @@ direction = "up"
 
 
 def main():
-    # Main Loop
     global blocks, start, count, color, direction
     run = True
+    # Main Loop
     while run:
         clock.tick()
 
@@ -80,12 +73,12 @@ def main():
         # Draw background
         screen.fill(bg)
         draw_world(screen, blocks)
-        blocks = player.update(blocks, dt)
 
+        # Updating blocks and drawing player
+        blocks = player.update(blocks, dt)
         player.draw()
 
-        # check_sprite_sheets(player_jump, 32*1.5)
-
+        # Setting colour and drawing border
         color, direction = return_color(color, direction, dt)
         draw_border(screen, particles, tuple(color), dt)
 
