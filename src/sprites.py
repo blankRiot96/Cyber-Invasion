@@ -2,7 +2,7 @@ import pygame
 from pygame.locals import *
 from src.sprite_sheet import SpriteSheet
 
-path = 'src/images/'
+path = 'assets/images/'
 
 '''Player Sprites'''
 player_scale = 1.5
@@ -44,19 +44,7 @@ player_run_dl = player_run[40:48]
 player_run_left = player_run[48:48 + 8]
 player_run_ul = player_run[56:64]
 
-player_movements = [
-    player_run_forward,
-    player_run_backward,
-    player_run_right,
-    player_run_left,
-    player_run_dr,
-    player_run_dl,
-    player_run_ur,
-    player_run_ul
-]
-
 # Player idle
-
 player_idle_forward = player_idle[0:2]
 player_idle_ur = player_idle[2:4]
 player_idle_right = player_idle[4:6]
