@@ -12,13 +12,13 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption('Sprite Sheet Preview')
 
 '''Sprite Sheet'''
-from src.sprites import player_run
-sprite_sheet = player_run
+from src.sprites import bee_bot
+sprite_sheet = bee_bot
 attributes = {
-    "size": 32,
+    "size": 40,
     "sprite sheet": sprite_sheet,
     "rows": 8,
-    "columns": 8
+    "columns": 1
 }
 
 

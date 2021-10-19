@@ -1,2 +1,4 @@
-x_dif = 450 - 424
-y_dif = 15
+from src.sprites import block_size
+
+x_dif = block_size / 2
+y_dif = block_size / 4

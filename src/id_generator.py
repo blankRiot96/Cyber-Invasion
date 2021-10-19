@@ -1,15 +1,16 @@
 import json
 import random
 
-with open('src/ids.json', 'r') as f:
-    ids = json.loads(f.read())
+
+ids = [1, 2, 3]
+
 
 def return_id(object):
     chars = 'abcdefghijklmnopqrstuvwxyz'
     upper_chars = chars.upper()
 
     id = "".join([random.choice([(random.choice(random.choice([chars, upper_chars]))),
-                 str(random.randint(0, 9))]) for _ in range(7)])
+                                 str(random.randint(0, 9))]) for _ in range(7)])
     id = object + '-' + id
 
     try:
@@ -21,6 +22,3 @@ def return_id(object):
             json.dump(ids, f, indent=2)
 
         return id
-
-
-print(return_id('grass_block'))

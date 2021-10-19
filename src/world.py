@@ -1,38 +1,48 @@
 import pygame
 import json
+from src.sprites import brick_block_1, brick_block_2, brick_block_3, dirt_block
+from src.diff_val import x_dif, y_dif
 
-# Draw world variables
-# x_dif = 450 - 385
-# y_dif = 37
-x_dif = 450 - 424
-y_dif = 15
+# Essentials
 grid = 20
 by = 0
-up = True
-selected = True
-
-# Blocks
-from src.sprites import block
+reference = {
+    "brick_block_1": brick_block_1,
+    "brick_block_2": brick_block_2,
+    "brick_block_3": brick_block_3,
+    "dirt_block": dirt_block
+}
 
 
 def load_world(level):
     blocks = {}
-    if level == 'playground':
-        with open('src/level_data/level_test.json', 'r') as f:
+    if level == "playground":
+        with open("src/level_data/level_test.json", "r") as f:
             blocks = json.loads(f.read())
 
     return blocks
 
 
 def draw_world(screen, blocks):
-    for index, e in enumerate(blocks['objects']):
-        for i in e:
-            obj = i[:i.find('-')]
+    # Index is the current dictionary we are
+    # inside of the list [{'block-41MR2p4': [480.0, 615.0, 60, 60]}...]
+    # So from 1..max num of blocks
 
-            params = blocks['objects'][index][i]
-            rect = pygame.Rect(*params)
-            if obj == 'block':
-                screen.blit(block, rect)
+    # e is the dictionary itself: {'block-41MR2p4': [480.0, 615.0, 60, 60]}
+    for index, e in enumerate(blocks["objects"]):
+        # i: 'block-41MR2p4'
+        for i in e:
+            block = i[: i.find("-")]
+
+            params = blocks["objects"][index][i]
+            rect = pygame.Rect(*params)  # x, y, block_size, block_size
+            
+            screen.blit(reference[block], rect)
+
+
+# Draw fun
+up = True
+selected = True
 
 
 def draw_fun(screen):
@@ -55,6 +65,15 @@ def draw_fun(screen):
 
             # Blit
             if selected:
-                screen.blit(block, ((450 + (x_dif * e)) - (x_dif * i), by + (0 + (y_dif * i) + (y_dif * e))))
+                screen.blit(
+                    brick_block_1,
+                    (
+                        (450 + (x_dif * e)) - (x_dif * i),
+                        by + (0 + (y_dif * i) + (y_dif * e)),
+                    ),
+                )
             else:
-                screen.blit(block, ((450 + (x_dif * e)) - (x_dif * i), 0 + (y_dif * i) + (y_dif * e)))
+                screen.blit(
+                    brick_block_1,
+                    ((450 + (x_dif * e)) - (x_dif * i), 0 + (y_dif * i) + (y_dif * e)),
+                )

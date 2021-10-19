@@ -1,6 +1,6 @@
 # Testing phase
     - Developing a level editor(throughout the process)
-    - Fixing left + up no jump issue
+        - Replace base blocks [***]
     - Making a spawner
     - Adding collision checking
     - Adding isometric ramps

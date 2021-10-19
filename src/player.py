@@ -1,5 +1,6 @@
 import pygame
 import math
+from src.display import screen_width, screen_height
 from src.sprites import (
     player_run_forward,
     player_run_backward,
@@ -12,8 +13,10 @@ from src.sprites import (
 
     player_jumping,
     player_idling,
+    player_scale
 )
 from src.shadow import Shadow
+from src.bullet import Bullet
 
 shadow = Shadow()
 
@@ -23,17 +26,25 @@ class Player:
         # Screen to blit on
         self.screen = screen
 
-        # Player attributes
+        # World attributes
         self.x = 0
         self.y = 0
+
+        # Player attributes
         self.coord = coord
+        self.rect = pygame.Rect(*self.coord, 32 * player_scale, 32 * player_scale)
+
         self.shadow_coord = list(coord)
         self.direction = ""
         self.speed = 1.2
 
+        # Handling shooting variables
+        self.bullets = []
+
         # Jump variables
         self.jump = False
         self.gravity = 2.2
+        self.cool_down = 115
         self.dy = 0
 
         # Variable to determine which stage of jumping the Player is in
@@ -131,18 +142,31 @@ class Player:
 
         return blocks
 
-    def player_jump(self, y):
-        cool_down = 200
+    def create_new_bullet(self, mx, my) -> str:
+        x, y = self.rect.center
+        self.bullets.append(bullet := Bullet(x, y, 7, mx, my))
 
+        return bullet.direction
+
+    def shoot(self) -> None:
+        for circle in self.bullets:
+            circle.update(self.dt)
+            circle.draw(self.screen)
+
+            conditions = [circle.x > screen_width, circle.x < 0, circle.y > screen_height, circle.y < 0]
+            if conditions[0] or conditions[1] or conditions[2] or conditions[3]:
+                self.bullets.remove(circle)
+
+    def player_jump(self, y):
         if not self.finished:
-            y = self.jump_up(y, cool_down)
+            y = self.jump_up(y)
         else:
-            y = self.jump_down(y, cool_down)
+            y = self.jump_down(y)
 
         return y
 
-    def jump_up(self, y, cool_down):
-        if self.dy < cool_down:
+    def jump_up(self, y):
+        if self.dy < self.cool_down:
             self.dy += self.gravity
             y += self.gravity
             self.shadow_coord[1] += self.gravity * self.dt
@@ -154,8 +178,8 @@ class Player:
 
         return y
 
-    def jump_down(self, y, cool_down):
-        if self.dy > -cool_down:
+    def jump_down(self, y):
+        if self.dy > -self.cool_down:
             self.dy -= self.gravity
             y -= self.gravity
             self.shadow_coord[1] -= self.gravity * self.dt
@@ -191,14 +215,14 @@ class Player:
             else:
                 self.stage = 2  # Max Height going up
         elif self.stage == 2:
-            if self.dy <= 200:
+            if self.dy <= self.cool_down:
                 if self.dy == 199:
                     self.update_index()
             else:
                 self.stage = 3  # Max height dropping down
         elif self.stage == 3:
             if 200 <= self.dy < 30:
-                if self.dy == 199:
+                if self.dy == self.cool_down - 1:
                     self.update_index()
             else:
                 self.stage = 4  # Landing
@@ -274,19 +298,42 @@ class Player:
     def draw(self) -> None:
         shadow.draw(self.screen, *self.shadow_coord)
 
-        match_cases = {
-            "right": self.right,
-            "left": self.left,
-            "forward": self.forward,
-            "backward": self.backward,
-            "down + right": self.dr,
-            "up + right": self.ur,
-            "down + left": self.dl,
-            "up + left": self.ul,
-            "": self.idle
-        }
-
         if not self.jump:
-            match_cases[self.direction]()
+            match self.direction:
+                case "right":
+                    self.right()
+                case "left":
+                    self.left()
+                case "forward":
+                    self.forward()
+                case "backward":
+                    self.backward()
+                case "down + right":
+                    self.dr()
+                case "up + right":
+                    self.ur()
+                case "down + left":
+                    self.dl()
+                case "up + left":
+                    self.ul()
+                case "":
+                    self.idle()
         else:
             self.draw_jump()
+
+        # match_cases = {
+        #     "right": self.right,
+        #     "left": self.left,
+        #     "forward": self.forward,
+        #     "backward": self.backward,
+        #     "down + right": self.dr,
+        #     "up + right": self.ur,
+        #     "down + left": self.dl,
+        #     "up + left": self.ul,
+        #     "": self.idle
+        # }
+        #
+        # if not self.jump:
+        #     match_cases[self.direction]()
+        # else:
+        #     self.draw_jump()
