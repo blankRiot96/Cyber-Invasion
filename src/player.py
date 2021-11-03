@@ -17,6 +17,8 @@ from src.sprites import (
 )
 from src.shadow import Shadow
 from src.bullet import Bullet
+from src.generic_types import BlocksType
+from src.enemies.handle import bees
 
 shadow = Shadow()
 
@@ -44,7 +46,7 @@ class Player:
         # Jump variables
         self.jump = False
         self.gravity = 2.2
-        self.cool_down = 115
+        self.cool_down = 200
         self.dy = 0
 
         # Variable to determine which stage of jumping the Player is in
@@ -62,7 +64,7 @@ class Player:
         # Index Variable
         self.index = 0
 
-    def update(self, blocks, dt) -> dict[str, list[dict[str, list[int]]]]:
+    def update(self, blocks, dt) -> BlocksType:
         self.dt = dt
         key = pygame.key.get_pressed()
         pressed1 = [key[pygame.K_RIGHT], key[pygame.K_LEFT], key[pygame.K_UP], key[pygame.K_DOWN]]
@@ -139,6 +141,11 @@ class Player:
             for name in block:
                 block[name][0] += self.x * dt
                 block[name][1] += self.y * dt
+
+        # Updating bees
+        for bee in bees:
+            bee.x += self.x * dt
+            bee.y += self.y * dt
 
         return blocks
 

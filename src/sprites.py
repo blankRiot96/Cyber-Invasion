@@ -127,7 +127,7 @@ brick_block_3 = scale_image(brick_block_3_img, block_size, block_size)
 
 # Dirt Block
 dirt_block_img = pygame.image.load(path + "blocks/dirt_block.png").convert_alpha()
-dirt_block = scale_image(brick_block_1_img, block_size, block_size)
+dirt_block = scale_image(dirt_block_img, block_size, block_size)
 
 # Shadow
 shadow_size = 20
@@ -142,3 +142,17 @@ bullet_img = pygame.image.load(path + "bullet.png").convert_alpha()
 cursor_size = 16
 cursor_img = pygame.image.load(path + "cursor.png").convert_alpha()
 cursor = scale_image(cursor_img, cursor_size, cursor_size)
+
+# Menu Bar
+menu_bar_size = 500
+menu_bar_img = pygame.image.load(path + "menu_bar.png").convert_alpha()
+menu_bar_img = pygame.transform.scale(menu_bar_img, (menu_bar_size, menu_bar_size))
+
+'''Icons'''
+# Gear icon
+gear_icon_size = 30
+gear_icon_img = pygame.image.load(path + "icons/gear-icon.png").convert_alpha()
+gear_icon = scale_image(gear_icon_img, gear_icon_size, gear_icon_size)
+
+# Checkmarks
+green_check_mark_img = pygame.image.load(path + "icons/green-checkmark.png").convert_alpha()

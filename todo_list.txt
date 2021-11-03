@@ -1,10 +1,7 @@
 # Testing phase
-    - Developing a level editor(throughout the process)
-        - Replace base blocks [***]
     - Making a spawner
     - Adding collision checking
     - Adding isometric ramps
-    - Adding enemies - [Flying robots]
     - Adding shooting (using mouse to aim)
     - Adding optimization
 
@@ -22,3 +19,7 @@
     - Working on diagonal movement
     - Adding isometric jumps
     - Making a proper sprite sheet checker file
+    - Developing a level editor(throughout the process)
+
+    - Adding enemies - [Flying robots]
+    - Adding shooting (using mouse to aim)

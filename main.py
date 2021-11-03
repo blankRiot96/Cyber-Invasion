@@ -9,13 +9,13 @@ from src.world import load_world, draw_world
 from src.border import draw_border, return_color
 from src.player import Player
 from src.enemies.bee_bot import BeeBot
+from src.enemies.handle import bees
 
 
 def main():
     """Pre loading game elements"""
     blocks = load_world("playground")
     player = Player([550, 300], screen)
-    bees = []
 
     """Variables for the Game"""
     # Define colours
@@ -73,7 +73,7 @@ def main():
             bees.append(BeeBot(1, player.coord))
             bee_rate = 0
 
-        # Drawimg bee bots and checking if shot by bullet
+        # Drawing bee bots and checking if shot by bullet
         for bee in bees:
             bee.update(dt)
             bee.draw(screen)

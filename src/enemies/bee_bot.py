@@ -19,23 +19,20 @@ class BeeBot:
         # Getting the angle in radians
         self.angle = math.atan2(self.target_y - self.y, self.target_x - self.x)
 
-        self.dx = 0
-        self.dy = 0
+        # Finding by how much to update player x and y to reach target
+        self.dx = math.cos(self.angle) * self.speed
+        self.dy = math.sin(self.angle) * self.speed
 
     def update(self, dt):
-        # Finding by how much to update player x and y to reach target
-        self.dx = math.cos(self.angle) * self.speed * dt
-        self.dy = math.sin(self.angle) * self.speed * dt
-
-        # Update player pos by dx and dy
-        self.x += self.dx
-        self.y += self.dy
+        # Update bee bot pos by dx and dy
+        self.x += self.dx * dt
+        self.y += self.dy * dt
 
         # Update rectangle
         self.rect.x = int(self.x)
         self.rect.y = int(self.y)
 
     def draw(self, screen):
-        screen.blit(self.image, (int(self.x), int(self.y)))
+        screen.blit(self.image, self.rect)
 
 
