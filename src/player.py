@@ -17,6 +17,7 @@ from src.sprites import (
 )
 from src.shadow import Shadow
 from src.bullet import Bullet
+from src.weapons.guns import Blaster
 from src.generic_types import BlocksType
 from src.enemies.handle import bees
 
@@ -40,14 +41,19 @@ class Player:
         self.direction = ""
         self.speed = 1.2
 
-        # Handling shooting variables
-        self.bullets = []
-
         # Jump variables
         self.jump = False
         self.gravity = 2.2
         self.cool_down = 200
         self.dy = 0
+
+        # Player weapons
+        self.blaster = Blaster(bullet_speed=7,
+                               shot_cool_down=40,
+                               max_bullets=12,
+                               reload_speed=5,
+                               _range=500,
+                               screen=screen)
 
         # Variable to determine which stage of jumping the Player is in
         self.stage = 0
@@ -64,7 +70,7 @@ class Player:
         # Index Variable
         self.index = 0
 
-    def update(self, blocks, dt) -> BlocksType:
+    def update(self, blocks, mx, my, dt) -> BlocksType:
         self.dt = dt
         key = pygame.key.get_pressed()
         pressed1 = [key[pygame.K_RIGHT], key[pygame.K_LEFT], key[pygame.K_UP], key[pygame.K_DOWN]]
@@ -147,22 +153,9 @@ class Player:
             bee.x += self.x * dt
             bee.y += self.y * dt
 
+        self.blaster.update(self.rect, (mx, my), dt)
+
         return blocks
-
-    def create_new_bullet(self, mx, my) -> str:
-        x, y = self.rect.center
-        self.bullets.append(bullet := Bullet(x, y, 7, mx, my))
-
-        return bullet.direction
-
-    def shoot(self) -> None:
-        for circle in self.bullets:
-            circle.update(self.dt)
-            circle.draw(self.screen)
-
-            conditions = [circle.x > screen_width, circle.x < 0, circle.y > screen_height, circle.y < 0]
-            if conditions[0] or conditions[1] or conditions[2] or conditions[3]:
-                self.bullets.remove(circle)
 
     def player_jump(self, y):
         if not self.finished:
@@ -303,8 +296,14 @@ class Player:
         self.screen.blit(player_run_ul[int(self.index)], tuple(self.coord))
 
     def draw(self) -> None:
+        # Drawing shadow
         shadow.draw(self.screen, *self.shadow_coord)
 
+        # Making player face towards the direction hes shooting at
+        if len(self.blaster.bullets) >= 1:
+            self.direction, self.last_direction = self.blaster.direction, self.blaster.direction
+
+        # Drawing player
         if not self.jump:
             match self.direction:
                 case "right":
@@ -328,19 +327,6 @@ class Player:
         else:
             self.draw_jump()
 
-        # match_cases = {
-        #     "right": self.right,
-        #     "left": self.left,
-        #     "forward": self.forward,
-        #     "backward": self.backward,
-        #     "down + right": self.dr,
-        #     "up + right": self.ur,
-        #     "down + left": self.dl,
-        #     "up + left": self.ul,
-        #     "": self.idle
-        # }
-        #
-        # if not self.jump:
-        #     match_cases[self.direction]()
-        # else:
-        #     self.draw_jump()
+        # Drawing player weapon
+        self.blaster.draw()
+

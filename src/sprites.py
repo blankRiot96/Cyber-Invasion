@@ -134,6 +134,13 @@ shadow_size = 20
 shadow_img = pygame.image.load(path + "shadow.png").convert_alpha()
 shadow_img = scale_image(shadow_img, shadow_size, shadow_size)
 
+
+'''Weapons'''
+blaster_size = (93*0.3, 66*0.3)
+blaster_img = pygame.image.load(path + "guns/side/blasterB.png").convert_alpha()
+blaster_img = pygame.transform.scale(blaster_img, blaster_size)
+
+'''Others'''
 # Bullet
 bullet_size = 5
 bullet_img = pygame.image.load(path + "bullet.png").convert_alpha()
@@ -156,3 +163,5 @@ gear_icon = scale_image(gear_icon_img, gear_icon_size, gear_icon_size)
 
 # Checkmarks
 green_check_mark_img = pygame.image.load(path + "icons/green-checkmark.png").convert_alpha()
+
+

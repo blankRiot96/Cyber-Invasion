@@ -58,15 +58,11 @@ def main():
         screen.fill(bg)
         draw_world(screen, blocks)
 
-        # Updating blocks and drawing player
-        blocks = player.update(blocks, dt)
+        # Getting mouse pos, essential
         mx, my = pygame.mouse.get_pos()
-        # Check for mouse input
-        if pygame.mouse.get_pressed(num_buttons=3)[0]:
-            if fire_rate >= 40:
-                bullet_direction = player.create_new_bullet(mx, my)
-                fire_rate = 0
-        player.shoot()
+
+        # Updating blocks and drawing player
+        blocks = player.update(blocks, mx, my, dt)
 
         # Generating Bees
         if bee_rate >= bee_generation_cool_down:
@@ -79,13 +75,11 @@ def main():
             bee.draw(screen)
 
             #  Checking for collision between bullet and bee bot
-            for bullet in player.bullets:
+            for bullet in player.blaster.bullets:
                 if bullet.rect.colliderect(bee.rect):
                     bees.remove(bee)
 
         # Drawing Player
-        if len(player.bullets) >= 1:
-            player.direction, player.last_direction = bullet_direction, bullet_direction
         player.draw()
 
         # Setting colour and drawing border

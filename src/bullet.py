@@ -52,6 +52,9 @@ class Bullet:
         self.dx = 0
         self.dy = 0
 
+        # Calculating how much the bullet has moved
+        self.distance = 0
+
     def update(self, dt):
         # Finding by how much to update player x and y to reach target
         self.dx = math.cos(self.angle) * self.speed * dt
@@ -65,5 +68,8 @@ class Bullet:
         self.rect.x = int(self.x)
         self.rect.y = int(self.y)
 
+        # Increasing amount moved
+        self.distance += math.sqrt((self.dx**2) + (self.dy**2))
+
     def draw(self, screen):
-        screen.blit(self.image, (int(self.x), int(self.y)))
+        screen.blit(self.image, self.rect)
