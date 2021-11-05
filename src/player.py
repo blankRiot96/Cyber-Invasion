@@ -301,7 +301,9 @@ class Player:
 
         # Making player face towards the direction hes shooting at
         if len(self.blaster.bullets) >= 1:
-            self.direction, self.last_direction = self.blaster.direction, self.blaster.direction
+            self.last_direction = self.blaster.direction
+            if self.direction != "":
+                self.direction = self.blaster.direction
 
         # Drawing player
         if not self.jump:

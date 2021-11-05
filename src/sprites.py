@@ -15,7 +15,7 @@ def scale_image(img: pygame.Surface, width: int, height: int) -> pygame.Surface:
 path = "assets/images/"
 
 """Player Sprites"""
-player_scale = 1.5
+player_scale = 2
 
 # Sprite sheets
 player_run_img = pygame.image.load(path + "player/player_run.png").convert_alpha()
@@ -76,7 +76,7 @@ player_idling = {
     "right": player_idle_right,
     "down + right": player_idle_dr,
     "forward": player_idle_forward,
-    "down + left": player_idle_dr,
+    "down + left": player_idle_dl,
     "left": player_idle_left,
     "up + left": player_idle_ul,
 }
@@ -136,9 +136,10 @@ shadow_img = scale_image(shadow_img, shadow_size, shadow_size)
 
 
 '''Weapons'''
-blaster_size = (93*0.3, 66*0.3)
+blaster_size = (93*0.2, 66*0.2)
 blaster_img = pygame.image.load(path + "guns/side/blasterB.png").convert_alpha()
 blaster_img = pygame.transform.scale(blaster_img, blaster_size)
+blaster_img_right = pygame.transform.flip(blaster_img, True, False)
 
 '''Others'''
 # Bullet

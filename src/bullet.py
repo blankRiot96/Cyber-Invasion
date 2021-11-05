@@ -43,10 +43,10 @@ class Bullet:
 
         # Getting the angle in radians
         self.angle = math.atan2(self.target_y - self.y, self.target_x - self.x)
-        degrees = self.angle * 57.2958
+        self.degrees = self.angle * 57.2958
 
         # Using degrees to determine player direction
-        self.direction = get_direction(int(degrees))
+        self.direction = get_direction(int(self.degrees))
 
         # Change in x and y
         self.dx = 0
